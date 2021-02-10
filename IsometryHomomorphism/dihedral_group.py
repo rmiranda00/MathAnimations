@@ -1,135 +1,15 @@
 from manimlib.imports import *
 import math
 
-class SquareToCircle(Scene):
-    def construct(self):
-        circle = Circle()
-        square = Square()
-        square.flip(RIGHT)
-        square.rotate(-3 * TAU / 8)
-        circle.set_fill(PINK, opacity=0.5)
-
-        self.play(ShowCreation(square))
-        self.play(Transform(square, circle))
-        self.play(FadeOut(square))
-
-class RegularPentagon(Scene):
-	def construct(self):
-		P = RegularPolygon(5, start_angle=0)
-		P.set_color(color='#34a4eb')
-		P.set_fill(color='#34a4eb', opacity=0.5)
-
-		self.play(ShowCreation(P))
-		self.wait(3)
-
-		self.play(Rotate(P, angle=math.radians(180), in_place=True))
-
-		P.flip(RIGHT)
-
-		self.wait(3)
-
-		self.play(Rotate(P, angle=math.radians(180), in_place=True, axis=UP))
-
-class Pentagon(Scene):
-	n_points = 5
-	P = None
-
-	def construct(self):
-		self.P = RegularPolygon(self.n_points, start_angle=math.pi * 0.5)
-		self.P.set_color(color='#34a4eb')
-		self.P.set_fill(color='#34a4eb', opacity=0.5)
-
-		self.play(ShowCreation(self.P))
-		self.wait(3)
-
-		self.rotate(1)
-		self.rotate(1)
-		self.rotate(3)
-		self.rotate(-2)
-
-		self.flip(0)
-		self.flip(3)
-
-	def rotate(self, n):
-		theta = 2 * math.pi / self.n_points
-		self.play(Rotate(self.P, angle=n * theta, in_place=True))
-		self.wait(2)
-
-	def flip(self, n):
-		theta = 2 * math.pi / self.n_points
-		axis = np.array((math.sin(n * theta), math.cos(n * theta), 0))
-
-		self.play(Rotate(self.P, angle=math.pi, in_place=True, axis=axis))
-		self.wait(2)
-
-class FivePoints(Scene):
-	n_points = 5
-
-	coords = []
-	points = []
-
-	def construct(self):
-		for i in range(self.n_points):
-			theta = 2 * math.pi / self.n_points
-			coord = math.sin(theta * i) * LEFT + math.cos(theta * i) * UP
-	
-			C = Circle(color='#34a4eb', radius=0.025)
-			C.set_fill(color='#34a4eb', opacity=1)
-
-			C.move_to(coord)
-			self.play(ShowCreation(C))
-
-			self.coords.append(coord)
-			self.points.append(C)
-
-		self.wait(3)
-
-		self.permute([1,2,3,4,0])
-		self.permute([2,3,1,0,4])
-		self.permute([0,1,2,3,4])
-
-	def permute(self, sigma):
-		transformations = []
-
-		for i in range(self.n_points):
-			transformations.append(ApplyMethod(self.points[i].move_to, self.coords[sigma[i]]))
-
-		self.play(*transformations)
-		self.wait(2)
-
-class makeText(Scene):
-    def construct(self):
-        #######Code#######
-        #Making text
-        first_line = TextMobject("Manim is fun")
-        second_line = TextMobject("and useful")
-        final_line = TextMobject("Hope you like it too!", color=BLUE)
-        color_final_line = TextMobject("Hope you like it too!")
-
-        #Coloring
-        color_final_line.set_color_by_gradient(BLUE,PURPLE)
-
-        #Position text
-        second_line.next_to(first_line, DOWN)
-
-        #Showing text
-        self.wait(1)
-        self.play(Write(first_line), Write(second_line))
-        self.wait(1)
-        self.play(FadeOut(second_line), ReplacementTransform(first_line, final_line))
-        self.wait(1)
-        self.play(Transform(final_line, color_final_line))
-        self.wait(2)
-
 class Dihedral(Scene):
 	n_points = 5
 
-	polygon_color = '#34a4eb'
+	polygon_color = '#34ebe2'
 	P = None
 
 	coords = []
 	points = []
-	point_color = '#156596'
+	point_color = '#4934eb'
 
 	def permute_points(self, sigma, wait=2):
 		transformations = []
@@ -143,19 +23,14 @@ class Dihedral(Scene):
 	def rotate_polygon(self, n, wait=2, coords=0):
 		theta = 2 * math.pi / self.n_points
 
-		#self.P.move_to(coords)
 		self.play(Rotate(self.P, angle=n * theta, in_place=True)) 
-		#self.play(ApplyMethod(self.P.move_to, coords))
 		self.wait(wait)
 
 	def flip_polygon(self, n, wait=2, coords=0):
 		theta = 2 * math.pi / self.n_points
 		axis = np.array((math.sin(n * theta), math.cos(n * theta), 0))
 
-		#self.P.move_to(coords)
 		self.play(Rotate(self.P, angle=math.pi, in_place=True, axis=axis))
-		#self.play(ApplyMethod(self.P.move_to, coords)) 
-
 		self.wait(wait)
 
 	def draw_polygon(self, wait=3):
