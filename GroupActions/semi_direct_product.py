@@ -2,6 +2,9 @@ from manimlib.imports import *
 
 class SemiDirectProduct(Scene):
 
+	z2 = None
+	z5 = None
+
 	def create_tex(self, tex, coords, wait=2):
 		t = Tex(tex)
 		t.move_to(coords)
